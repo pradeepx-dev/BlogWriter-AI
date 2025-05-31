@@ -1,12 +1,52 @@
-# React + Vite
+# ✍️ BlogWriter AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive blog content generator web app built with **React (Vite)** and **Tailwind CSS**, powered by **Google Gemini Pro** via the `@google/generative-ai` SDK.
 
-Currently, two official plugins are available:
+> 🚀 Generate high-quality blog posts based on a topic and writing tone using the power of AI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## 🔗 **Live Website:** [https://blogwriter.pradeepx.me](https://blogwriter.pradeepx.me)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+## 🔥 Features
+
+### 🎨 UI / UX
+- ✅ Clean, responsive UI built with Tailwind CSS
+- 📝 Input field for blog topic
+- 🎯 Tone selector: Formal, Casual, SEO-Friendly
+- ⚡ Generate button with loading animation
+- 📄 Nicely formatted AI-generated blog content
+- 🔢 Word count and estimated reading time (200 WPM)
+- 📋 Copy to clipboard
+- 📥 Download as `.txt` file
+- 🌗 Light/Dark theme toggle with persistence
+- 📱 Fully responsive (mobile/tablet/desktop)
+
+---
+
+## 🤖 AI Integration (Gemini Pro)
+
+Uses the official [`@google/generative-ai`](https://www.npmjs.com/package/@google/generative-ai) SDK.
+
+### ✉️ Prompts
+- **Formal** → “Write a formal and professional blog post.”
+- **Casual** → “Write a friendly and conversational blog post.”
+- **SEO-Friendly** → “Write an SEO-optimized blog post using relevant keywords.”
+
+---
+
+## 🛠 Tech Stack
+
+| Technology       | Purpose                         |
+|------------------|---------------------------------|
+| React (Vite)     | Frontend framework              |
+| Tailwind CSS     | Styling and responsiveness      |
+| @google/generative-ai | AI content generation         |
+| dotenv (.env)    | API key management              |
+| React Icons      | Icons and UI enhancements       |
+| classnames       | Dynamic class management        |
+
+---
+
+## 🧑‍💻 Author
+- Pradeep Kumar Maurya
