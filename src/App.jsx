@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Moon, Sun, Copy, Download, RefreshCw, BookOpen, Clock, Hash } from 'lucide-react';
 
 const App = () => {
@@ -13,15 +12,9 @@ const App = () => {
   const [readingTime, setReadingTime] = useState(0);
   const [copySuccess, setCopySuccess] = useState(false);
 
-  // Initialize Gemini AI
-  const initializeAI = () => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error('Please add your Gemini API key to the .env file');
-    }
-    const genAI = new GoogleGenerativeAI(apiKey);
-    return genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-  };
+  const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY; // Put in .env
+  const SITE_URL = import.meta.env.VITE_SITE_URL || "http://localhost:5173"; 
+  const SITE_NAME = import.meta.env.VITE_SITE_NAME || "My BlogWriter AI"; 
 
   // Load theme preference
   useEffect(() => {
@@ -32,12 +25,12 @@ const App = () => {
     }
   }, []);
 
-  // Calculate word count and reading time
+  // Calculate word count + reading time
   useEffect(() => {
     if (content) {
       const words = content.trim().split(/\s+/).length;
       setWordCount(words);
-      setReadingTime(Math.ceil(words / 200)); // 200 words per minute
+      setReadingTime(Math.ceil(words / 200));
     } else {
       setWordCount(0);
       setReadingTime(0);
@@ -56,39 +49,78 @@ const App = () => {
   };
 
   const getTonePrompt = (selectedTone) => {
-    const prompts = {
-      formal: "Write a formal and professional blog post with proper structure, academic tone, and authoritative language. Use clear headings, professional terminology, and maintain a serious, informative style throughout.",
-      casual: "Write a friendly and conversational blog post as if you're talking to a close friend. Use simple language, personal anecdotes, contractions, and an approachable tone that makes complex topics easy to understand.",
-      seo: "Write an SEO-optimized blog post using relevant keywords naturally throughout the content. Include proper headings (H1, H2, H3), meta-friendly structure, keyword-rich introductions and conclusions, and ensure the content is search engine friendly while remaining readable."
-    };
-    return prompts[selectedTone];
-  };
+    const baseGuidelines = `
+You are an expert blog writer who creates engaging, easy-to-read, and SEO-friendly content.  
+Write a blog post on the topic \`${topic}\` in maximum 250 words.
 
+Requirements:  
+1. Use a conversational and human-like tone, as if explaining to a friend.  
+2. Structure the blog with:  
+   • An engaging introduction that hooks the reader  
+   • Clear subheadings 
+   • Short paragraphs (2–4 lines each)  
+   • Bullet points or numbered lists where useful  
+3. Avoid AI-sounding language like "As an AI" or repetitive phrasing.  
+4. Add examples, analogies, or simple real-life references to make it relatable.  
+5. Make it SEO-friendly by naturally including relevant keywords without keyword stuffing.  
+6. End with a strong conclusion and, if suitable, a call-to-action.  
+7. Keep grammar clean and ensure readability for a general audience at grade 6–8 reading level.
+8. Do not include asterisks (*) and double asterisks (**), hash symbols (#), hyphens (-), or inline comments in the output.    
+
+Output should be a well-formatted blog post ready for publishing.
+`;
+  
+    const tones = {
+      formal: "Maintain a professional and structured tone.",
+      casual: "Keep it friendly, simple, and conversational.",
+      seo: "Focus on keyword-rich, search-friendly structure while staying natural."
+    };
+  
+    return `${baseGuidelines}\n\nTone Style: ${tones[selectedTone]}`;
+  };
+  
   const generateContent = async () => {
     if (!topic.trim()) {
       setError('Please enter a blog topic');
       return;
     }
-
+  
     setLoading(true);
     setError('');
     setContent('');
-
+  
     try {
-      const model = initializeAI();
-      const prompt = `${getTonePrompt(tone)}\n\nTopic: ${topic}`;
-      
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-      
+      const prompt = getTonePrompt(tone).replace("{insert topic here}", topic);
+  
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": import.meta.env.SITE_URL,
+          "X-Title": import.meta.env.SITE_NAME,
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-oss-20b:free",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to generate content");
+      }
+  
+      const data = await response.json();
+      const text = data.choices[0]?.message?.content || "No response from AI.";
+  
       setContent(text);
     } catch (err) {
-      setError(err.message || 'Failed to generate content. Please check your API key and try again.');
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   const copyToClipboard = async () => {
     try {
@@ -159,7 +191,6 @@ const App = () => {
                     Blog Topic
                   </label>
                   <textarea
-                    type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                     placeholder="Enter your blog topic (e.g., 'Benefits of Remote Work')"
@@ -198,7 +229,7 @@ const App = () => {
                 <button
                   onClick={generateContent}
                   disabled={loading || !topic.trim()}
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+                  className="w-full mt-12 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
                   {loading ? (
                     <>
@@ -219,6 +250,20 @@ const App = () => {
                     <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
                   </div>
                 )}
+
+                <div className="text-center mt-4 pt-1 border-t border-blue-400 ">
+                  <p className="text-sm text-gray-200">
+                    © {new Date().getFullYear()} BlogWriter AI. Created by{' '}
+                    <a
+                      href="https://github.com/pradeepx-dev"
+                      className="hover:text-blue-200 transition-colors text-blue-400"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      pradeepx-dev
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
 
