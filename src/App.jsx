@@ -12,7 +12,7 @@ const App = () => {
   const [readingTime, setReadingTime] = useState(0);
   const [copySuccess, setCopySuccess] = useState(false);
 
-  const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY; // Put in .env
+  const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
   const SITE_URL = import.meta.env.VITE_SITE_URL || "http://localhost:5173"; 
   const SITE_NAME = import.meta.env.VITE_SITE_NAME || "My BlogWriter AI"; 
 
@@ -288,7 +288,7 @@ Output should be a well-formatted blog post ready for publishing.
                         <span className="text-sm">Read Time</span>
                       </div>
                       <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {readingTime} min
+                        {readingTime} seconds
                       </div>
                     </div>
                   </div>
