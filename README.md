@@ -6,6 +6,9 @@ A modern, responsive blog content generator web app built with **React (Vite)** 
 
 
 ## 🔗 **Live Website:** [https://blogwriter.pradeepx.me](https://blogwriter.pradeepx.me)
+---
+<img width="3196" height="1652" alt="image" src="https://github.com/user-attachments/assets/20f71ffc-3f98-4265-bd85-0026c561a487" />
+
 
 ---
 ## 🔥 Features
