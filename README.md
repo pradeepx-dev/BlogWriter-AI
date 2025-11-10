@@ -1,6 +1,6 @@
 # ✍️ BlogWriter AI
 
-A modern, responsive blog content generator web app built with **React (Vite)** and **Tailwind CSS**, powered by **Google Gemini Pro** via the `@google/generative-ai` SDK.
+A modern, responsive blog content generator web app. Utilizes OpenRouter API to create SEO-optimized blog posts based on user prompts..
 
 > 🚀 Generate high-quality blog posts based on a topic and writing tone using the power of AI.
 
