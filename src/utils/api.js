@@ -1,3 +1,4 @@
+ const API_KEY = import.meta.env.API_KEY;
 const SITE_URL = import.meta.env.SITE_URL
 const SITE_NAME = import.meta.env.SITE_NAME || "My BlogWriter AI";
 
