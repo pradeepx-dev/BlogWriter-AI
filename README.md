@@ -7,9 +7,7 @@ A modern, responsive blog content generator web app. Utilizes OpenRouter API to 
 
 ## 🔗 **Live Website:** [https://blogwriter.pradeepx.me](https://blogwriter.pradeepx.me)
 ---
-<img width="3196" height="1652" alt="image" src="https://github.com/user-attachments/assets/20f71ffc-3f98-4265-bd85-0026c561a487" />
-
-
+<img width="3127" height="1625" alt="image" src="https://github.com/user-attachments/assets/3d0c9fa2-86e7-4443-b433-28cf3f879260" />
 ---
 ## 🔥 Features
 
