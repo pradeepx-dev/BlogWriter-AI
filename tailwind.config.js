@@ -6,7 +6,15 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'shimmer': 'shimmer 2s infinite',
+        'slide-in': 'slide-in-from-top 0.3s ease-out',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+    },
   },
   plugins: [],
 }
