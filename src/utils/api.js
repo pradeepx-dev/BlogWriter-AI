@@ -1,6 +1,6 @@
- const API_KEY = import.meta.env.API_KEY;
-const SITE_URL = import.meta.env.SITE_URL
-const SITE_NAME = import.meta.env.SITE_NAME || "My BlogWriter AI";
+const API_KEY = import.meta.env.VITE_API_KEY || import.meta.env.API_KEY;
+const SITE_URL = import.meta.env.VITE_SITE_URL || import.meta.env.SITE_URL;
+const SITE_NAME = import.meta.env.VITE_SITE_NAME || import.meta.env.SITE_NAME || "My BlogWriter AI";
 
 const getTonePrompt = (topic, selectedTone) => {
   const baseGuidelines = `
@@ -150,7 +150,9 @@ export const generateBlogContent = async (topic, tone) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to generate content");
+    // Try to read response body for more helpful debugging info
+    const body = await response.text().catch(() => null);
+    throw new Error(`Failed to generate content (status ${response.status})${body ? `: ${body}` : ''}`);
   }
 
   const data = await response.json();
